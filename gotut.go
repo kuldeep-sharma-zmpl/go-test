@@ -1,15 +1,17 @@
-package randopm
+package main
 
-type redis interface {
-    Set(key string, value inteface{}) int
-    Get(param string) int
-}
+import (
+	"fmt"
+	"net/http"
+)
 
-func MyFunc(r redis) {
-	r.Set(somevalue)
-}
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Welcome to my website!")
+	})
 
-import "goredis"
-type redis struct {
-    
+	fs := http.FileServer(http.Dir("static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.ListenAndServe(":80", nil)
 }
