@@ -12,3 +12,4 @@ import "goredis"
 type redis struct {
     
 }
+
