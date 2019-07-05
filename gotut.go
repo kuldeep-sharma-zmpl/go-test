@@ -1,3 +1,4 @@
+package randopm
 
 type redis interface {
     Set(key string, value inteface{}) int
@@ -12,4 +13,3 @@ import "goredis"
 type redis struct {
     
 }
-
