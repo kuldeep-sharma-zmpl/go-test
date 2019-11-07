@@ -2,17 +2,24 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"log"
+
+	// Import the redigo/redis package.
+	"github.com/gomodule/redigo/redis"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Ping!")
-	})
+	conn, err := redis.Dial("tcp", "localhost:6379")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	fs := http.FileServer(http.Dir("static/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	defer conn.Close()
 
-    http.ListenAndServe(":80", nil)
-    
+	_, err = conn.Do("HMSET", "album:2", "title", "Electric Ladyland", "artist", "Jimi Hendrix", "price", 4.95, "likes", 8)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Electric Ladyland added!")
 }
